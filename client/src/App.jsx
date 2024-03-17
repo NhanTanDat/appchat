@@ -8,17 +8,19 @@ import NavBar from "./components/NavBar";
 import { ChatContextProvider } from "./context/ChatContext";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
+import Home from "./pages/Home/Home";
 
 function App() {
   const { user } = useContext(AuthContext);
   return (
     <ChatContextProvider user={user}>
       <NavBar />
-      <Container className="text-secondary">
+      <Container fluid className="text-secondary">
         <Routes>
           <Route path="/" element={user ? <Chat /> : <Login />} />
           <Route path="/register" element={user ? <Chat /> : <Register />} />
           <Route path="/login" element={user ? <Chat /> : <Login />} />
+          <Route path="/home" element={ <Home />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Container>

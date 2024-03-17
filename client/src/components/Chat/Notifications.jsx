@@ -3,7 +3,7 @@ import { ChatContext } from "../../context/ChatContext";
 import moment from "moment";
 import { AuthContext } from "../../context/AuthContext";
 import { unreadNotificationsFunc } from "../../utils/unreadNotifications";
-
+import bell from "../../assets/Bell.svg"
 const Notifications = () => {
   const { user } = useContext(AuthContext);
   const {
@@ -28,16 +28,7 @@ const Notifications = () => {
   return (
     <div className="notifications">
       <div className="notifications-icon" onClick={() => setIsOpen(!isOpen)}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          fill="currentColor"
-          className="bi bi-chat-left-fill"
-          viewBox="0 0 16 16"
-        >
-          <path d="M2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
-        </svg>
+      <img src={bell} alt="person-circle" height="35px" style={{ filter: 'invert(100%)' }}/>
         {unreadNotifications?.length === 0 ? null : (
           <span className="notification-count">
             <span>{unreadNotifications?.length}</span>
