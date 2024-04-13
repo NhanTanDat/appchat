@@ -14,18 +14,18 @@ const registerUser = async (req, res) => {
 
   try {
     let user = await userModel.findOne({ email });
-    if (user) return res.status(400).json("User already exists...");
+    if (user) return res.status(400).json("Người dùng đã tồn tại...");
 
     user = new userModel({ name, email, password });
 
     if (!name || !email || !password)
-      return res.status(400).json("All fields are required...");
+      return res.status(400).json("Tất cả các trường là bắt buộc...");
 
     if (!validator.isEmail(email))
-      return res.status(400).json("Email must be a valid email...");
+      return res.status(400).json("Email phải là email hợp lệ...");
 
     if (!validator.isStrongPassword(password))
-      return res.status(400).json("Password must be a strong password..");
+      return res.status(400).json("Mật khẩu phải là mật khẩu mạnh..");
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
@@ -47,11 +47,11 @@ const loginUser = async (req, res) => {
   try {
     let user = await userModel.findOne({ email });
 
-    if (!user) return res.status(400).json("Invalid email or password...");
+    if (!user) return res.status(400).json("Email hoặc mật khẩu không hợp lệ...");
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword)
-      return res.status(400).json("Invalid email or password...");
+      return res.status(400).json("Email hoặc mật khẩu không hợp lệ...");
 
     const token = createToken(user._id);
 

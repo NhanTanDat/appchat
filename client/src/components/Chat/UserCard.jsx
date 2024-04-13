@@ -34,11 +34,10 @@ const UserCard = ({ chat, user }) => {
   };
 
   return (
-    <>
+    <div className="oke">
       <Stack
         direction="horizontal"
-        gap={3}
-        className="user-card align-items-center p-2 justify-content-between"
+        className="user-card p-3 justify-content-between"
         role="button"
         onClick={() => {
           if (thisUserNotifications?.length !== 0) {
@@ -49,9 +48,10 @@ const UserCard = ({ chat, user }) => {
           }
         }}
       >
-        <div className="d-flex">
-          <div className="me-2">
-            <img src={avarter} alt="person-circle" height="35px" />
+        <div className="d-flex ">
+          <div className="avatar">
+            <img src={avarter} alt="person-circle" height="50px" />
+            <span className={isOnline ? "user-online" : ""}></span>
           </div>
           <div className="text-content">
             <div className="name">{recipientUser?.name}</div>
@@ -75,10 +75,10 @@ const UserCard = ({ chat, user }) => {
               ? thisUserNotifications?.length
               : ""}
           </div>
-          <span className={isOnline ? "user-online" : ""}></span>
+         
         </div>
       </Stack>
-    </>
+    </div>
   );
 };
 

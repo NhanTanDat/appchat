@@ -28,7 +28,7 @@ const Notifications = () => {
   return (
     <div className="notifications">
       <div className="notifications-icon" onClick={() => setIsOpen(!isOpen)}>
-      <img src={bell} alt="person-circle" height="35px" style={{ filter: 'invert(100%)' }}/>
+      <img src={bell} alt="person-circle" height="35px" style={{}}/>
         {unreadNotifications?.length === 0 ? null : (
           <span className="notification-count">
             <span>{unreadNotifications?.length}</span>
@@ -38,16 +38,16 @@ const Notifications = () => {
       {isOpen ? (
         <div className="notifications-box">
           <div className="notifications-header">
-            <h3>Nofications</h3>
+            <h3>Thông báo</h3>
             <div
               className="mark-as-read"
               onClick={() => markAllNotificationsAsRead(notifications)}
             >
-              Mark all as read
+              đánh dấu tất đã đọc
             </div>
           </div>
           {modifiedNotifications?.length === 0 ? (
-            <span className="notification">No notifications yet...</span>
+            <span className="notification">Chưa có thông báo nào...</span>
           ) : null}
           {modifiedNotifications &&
             modifiedNotifications.map((n, index) => (
@@ -59,7 +59,7 @@ const Notifications = () => {
                   setIsOpen(false);
                 }}
               >
-                <span>{`${n.senderName} sent you a new message...`}</span>
+                <span>{`${n.senderName} đã gửi cho bạn một tin nhắn mới...`}</span>
                 <span className="notification-time">
                   {moment(n.date).calendar()}
                 </span>

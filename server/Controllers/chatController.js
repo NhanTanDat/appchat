@@ -3,7 +3,6 @@ const chatModel = require("../Models/chatModel");
 const createChat = async (req, res) => {
   const { senderId, receiverId } = req.body;
   try {
-    // check if a chat already exist
     const chat = await chatModel.findOne({
       members: { $all: [senderId, receiverId] },
     });

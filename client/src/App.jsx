@@ -14,8 +14,8 @@ function App() {
   const { user } = useContext(AuthContext);
   return (
     <ChatContextProvider user={user}>
+      {/* <Container className="container" fluid> */}
       <NavBar />
-      <Container fluid className="text-secondary">
         <Routes>
           <Route path="/" element={user ? <Chat /> : <Login />} />
           <Route path="/register" element={user ? <Chat /> : <Register />} />
@@ -23,7 +23,7 @@ function App() {
           <Route path="/home" element={ <Home />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
-      </Container>
+      {/* </Container> */}
     </ChatContextProvider>
   );
 }

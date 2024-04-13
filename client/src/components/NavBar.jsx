@@ -10,34 +10,32 @@ import bell from "../assets/Bell.svg"
 const NavBar = () => {
 const { user, logoutUser } = useContext(AuthContext);
   return (
-    <Navbar bg="dark" className="mb-4" style={{ height: "70px" }}>
+    <Navbar  className="mb-4" style={{ height: "70px",background: "#ffffff" }}>
       <Container fluid>
-        
         <h2>
-          <Link to="/" className="link-light text-decoration-none" >
+          <Link to="/" className="text-decoration-none" >
            Hallo
           </Link>
         </h2>
         <Stack direction="horizontal" gap={5}>
-        <Link to="/home" className="link-light text-decoration-none" >
-          <img src={homeicon} alt="person-circle" height="35px" style={{ filter: 'invert(100%)' }} />
+        <Link to="/home" className="text-decoration-none" >
+          <img src={homeicon} alt="person-circle" height="35px" style={{}} />
         </Link>
-        <img src={homeicon} alt="person-circle" height="35px" style={{ filter: 'invert(100%)' }} />
-        <img src={homeicon} alt="person-circle" height="35px" style={{ filter: 'invert(100%)' }} />
-        <img src={homeicon} alt="person-circle" height="35px" style={{ filter: 'invert(100%)' }} />
+        <img src={homeicon} alt="person-circle" height="35px" style={{}} />
+        <img src={homeicon} alt="person-circle" height="35px" style={{}} />
+        <img src={homeicon} alt="person-circle" height="35px" style={{}} />
         </Stack>
         
         <Nav>
           <Stack direction="horizontal" gap={3}>
             {!user && (
               <>
-                <Link to="/login" className="link-light text-decoration-none">
-                  
+                <Link to="/login" className=" text-decoration-none" >
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  className="link-light text-decoration-none"
+                  className="text-decoration-none"
                 >
                   Register
                 </Link>
@@ -46,17 +44,16 @@ const { user, logoutUser } = useContext(AuthContext);
             {user && (
               <>
                 <Notifications />
-                <Link to="/chat" className="link-light text-decoration-none">
-                <img src={ChatCircleDots} alt="person-circle" height="35px" style={{ filter: 'invert(100%)' }}/>
+                <Link to="/chat" className="text-decoration-none">
+                <img src={ChatCircleDots} alt="person-circle" height="35px" style={{  }}/>
                 </Link>
-                
-                <img src={avarter} alt="person-circle" height="35px" style={{ filter: 'invert(100%)' }}/>
+                <img src={avarter} alt="person-circle" height="35px" style={{ }}/>
                 <Link
                   onClick={() => logoutUser()}
                   to="/login"
-                  className="link-light text-decoration-none"
+                  className="text-decoration-none"
                 >
-                  Logout
+                  Đăng xuất
                 </Link>
               </>
             )}

@@ -29,52 +29,42 @@ export const ChatContextProvider = ({ children, user }) => {
   console.log("sendTextMessageError", sendTextMessageError);
   console.log("notifications", notifications);
 
-  // initialize socket
+ 
   useEffect(() => {
-    const newSocket = io("http://localhost:3000");
+    const newSocket = io("http://localhost:80");
     setSocket(newSocket);
-
     return () => {
       newSocket.disconnect();
     };
   }, [user]);
 
-  // set online users
   useEffect(() => {
     if (socket === null) return;
-
     socket.emit("addNewUser", user?._id);
     socket.on("getUsers", (res) => {
       setOnlineUsers(res);
     });
-
     return () => {
       socket.off("getUsers");
     };
   }, [socket]);
 
-  // send message
+
   useEffect(() => {
     if (socket === null) return;
-
     const recipientId = currentChat?.members.find((id) => id !== user?._id);
-
     socket.emit("sendMessage", { ...newMessage, recipientId });
   }, [newMessage]);
 
-  // receive message and notifications
+
   useEffect(() => {
     if (socket === null) return;
-
     socket.on("getMessage", (res) => {
       if (currentChat?._id !== res.chatId) return;
-
       setMessages((prev) => [...prev, res]);
     });
-
     socket.on("getNotification", (res) => {
       const isChatOpen = currentChat?.members.some((Id) => Id === res.senderId);
-
       if (isChatOpen) {
         setNotifications((prev) => [{ ...res, isRead: true }, ...prev]);
       } else {
@@ -211,7 +201,6 @@ export const ChatContextProvider = ({ children, user }) => {
 
   const markNotificationAsRead = useCallback(
     (n, userChats, user, notifications) => {
-      // find chat to open
       const readChat = userChats.find((chat) => {
         const chatMembers = [user._id, n.senderId];
         const isDesiredChat = chat?.members.every((member) => {
@@ -220,8 +209,6 @@ export const ChatContextProvider = ({ children, user }) => {
 
         return isDesiredChat;
       });
-
-      // mark notification as read
       const modifiedNotifications = notifications.map((element) => {
         if (n.senderId === element.senderId) {
           return { ...n, isRead: true };
@@ -238,7 +225,6 @@ export const ChatContextProvider = ({ children, user }) => {
 
   const markThisUserNotificationsAsRead = useCallback(
     (thisUserNotifications, notifications) => {
-      // mark notification as read
 
       const modifiedNotifications = notifications.map((element) => {
         let notification;

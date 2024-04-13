@@ -18,11 +18,11 @@ app.use("/api/chats", chatRoute);
 app.use("/api/messages", messageRoute);
 
 app.get("/", (req, res) => {
-  res.send("Welcome to our chat API...");
+  res.send("Chào mừng em đến với nhà của bọn anh !!!!!!");
 });
 
 const uri = process.env.DATABASE;
-const port = process.env.PORT || 5000;
+const port = process.env.PORT;
 
 app.listen(port, () => {
   console.log(`Server running on port: ${port}...`);
@@ -33,5 +33,5 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("MongoDB connection established..."))
-  .catch((error) => console.error("MongoDB connection failed:", error.message));
+  .then(() => console.log("MongoDB kết nối thành công..."))
+  .catch((error) => console.error("MongoDB kết nối thất bại:", error.message));
