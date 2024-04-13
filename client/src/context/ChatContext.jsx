@@ -49,7 +49,6 @@ export const ChatContextProvider = ({ children, user }) => {
     };
   }, [socket]);
 
-
   useEffect(() => {
     if (socket === null) return;
     const recipientId = currentChat?.members.find((id) => id !== user?._id);
@@ -140,7 +139,6 @@ export const ChatContextProvider = ({ children, user }) => {
         if (response.error) {
           return setUserChatsError(response);
         }
-
         setUserChats(response);
       }
 
@@ -156,8 +154,7 @@ export const ChatContextProvider = ({ children, user }) => {
 
   const sendTextMessage = useCallback(
     async (textMessage, sender, currentChatId, setTextMessage) => {
-      if (!textMessage) return console.log("You must type something...");
-
+      if (!textMessage) return console.log("Bạn phải gõ một cái gì đó...");
       const response = await postRequest(
         `${baseUrl}/messages`,
         JSON.stringify({
@@ -166,11 +163,9 @@ export const ChatContextProvider = ({ children, user }) => {
           text: textMessage,
         })
       );
-
       if (response.error) {
         return setSendTextMessageError(response);
       }
-
       setNewMessage(response);
       setMessages((prev) => [...prev, response]);
       setTextMessage("");
@@ -183,11 +178,9 @@ export const ChatContextProvider = ({ children, user }) => {
       `${baseUrl}/chats`,
       JSON.stringify({ senderId, receiverId })
     );
-
     if (response.error) {
-      return console.log("Error creating chat:", response);
+      return console.log("Lỗi khi tạo cuộc trò chuyện:", response);
     }
-
     setUserChats((prev) => [...prev, response]);
   }, []);
 
@@ -195,10 +188,10 @@ export const ChatContextProvider = ({ children, user }) => {
     const modifiedNotifications = notifications.map((n) => {
       return { ...n, isRead: true };
     });
-
     setNotifications(modifiedNotifications);
   }, []);
 
+  
   const markNotificationAsRead = useCallback(
     (n, userChats, user, notifications) => {
       const readChat = userChats.find((chat) => {
@@ -206,7 +199,6 @@ export const ChatContextProvider = ({ children, user }) => {
         const isDesiredChat = chat?.members.every((member) => {
           return chatMembers.includes(member);
         });
-
         return isDesiredChat;
       });
       const modifiedNotifications = notifications.map((element) => {
@@ -216,7 +208,6 @@ export const ChatContextProvider = ({ children, user }) => {
           return element;
         }
       });
-
       updateCurrentChat(readChat);
       setNotifications(modifiedNotifications);
     },

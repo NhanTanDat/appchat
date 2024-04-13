@@ -23,7 +23,7 @@ const ChatBox = () => {
   if (!recipientUser)
     return (
       <p style={{ textAlign: "center", width: "100%" }}>
-        No conversation selected yet..
+        Chưa có cuộc trò chuyện nào được chọn..
       </p>
     );
 

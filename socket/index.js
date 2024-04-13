@@ -26,7 +26,7 @@ io.on("connection", (socket) => {
     );
 
     if (user) {
-      console.log("sending message and notification");
+      console.log("gửi tin nhắn và thông báo");
       io.to(user.socketId).emit("getMessage", message);
       io.to(user.socketId).emit("getNotification", {
         senderId: message.senderId,
@@ -45,4 +45,4 @@ io.on("connection", (socket) => {
 
 io.listen(80);
 
-console.log(`Server running on port: 80...`);
+console.log(`Server socket running on port: 80...`);

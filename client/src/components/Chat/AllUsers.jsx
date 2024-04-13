@@ -6,7 +6,6 @@ const AllUsers = () => {
   const { user } = useContext(AuthContext);
   const { potentialChats, createChat } = useContext(ChatContext);
   const { onlineUsers } = useContext(ChatContext);
-
   return (
     <>
       <div className="all-users">
@@ -17,14 +16,7 @@ const AllUsers = () => {
               key={index}
               onClick={() => createChat(user._id, receiver._id)}
             >
-              {receiver.name}
-              <span
-                className={
-                  onlineUsers?.some((user) => user?.userId === receiver?._id)
-                    ? "user-online"
-                    : ""
-                }
-              ></span>
+              {receiver.name}  
             </div>
           ))}
       </div>
