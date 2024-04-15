@@ -1,10 +1,20 @@
 export const baseUrl = "http://localhost:3000/api";
 
 export const postRequest = async (url, body) => {
+  const tokenWithQuotes = localStorage.getItem("token");
+  const token = tokenWithQuotes.replace(/^"|"$/g, ''); 
+
+  const logoutUser = () => {
+    localStorage.removeItem("User");
+    setUser(null);
+  };
+
+
   const response = await fetch(url, {
     method: "POST",
-    headers: {
+    headers:{
       "Content-Type": "application/json",
+      "Authorization": token
     },
     body,
   });
@@ -23,10 +33,16 @@ export const postRequest = async (url, body) => {
     return { error: true, status: response.status, message };
   }
 
+  if (response.status === 401) {
+    logoutUser(); 
+    return { error: true, status: response.status, message: "Token không hợp lệ" };
+  }
+
   return data;
 };
 
 export const getRequest = async (url) => {
+
   const response = await fetch(url);
 
   const data = await response.json();

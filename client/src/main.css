@@ -227,3 +227,12 @@ e
 .container-chat{
   padding: 0px 32px;
 }
+.overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Độ mờ có thể điều chỉnh bằng giá trị alpha (0 đến 1) */
+  z-index: 4; /* Đảm bảo nó nằm trên popup */
+}

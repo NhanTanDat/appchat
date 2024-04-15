@@ -21,12 +21,12 @@ const Login = () => {
               <h2>Login</h2>
 
               <Form.Control
-                type="email"
-                placeholder="Email"
+                type="text"
+                placeholder="Email or Phone"
                 onChange={(e) =>
-                  updateLoginInfo({ ...loginInfo, email: e.target.value })
+                  updateLoginInfo({ ...loginInfo, emailOrPhone: e.target.value })
                 }
-                value={loginInfo.email}
+                value={loginInfo.emailOrPhone}
               />
               <Form.Control
                 type="password"

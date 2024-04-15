@@ -33,6 +33,14 @@ const Register = () => {
                 }
                 value={registerInfo.name}
               />
+               <Form.Control
+                type="text"
+                placeholder="Phone"
+                onChange={(e) =>
+                  updateRegisterInfo({ ...registerInfo, phone: e.target.value })
+                }
+                value={registerInfo.phone}
+              />
               <Form.Control
                 type="email"
                 placeholder="Email"

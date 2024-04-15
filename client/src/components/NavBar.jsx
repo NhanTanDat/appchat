@@ -9,6 +9,7 @@ import ChatCircleDots from "../assets/ChatCircleDots.svg"
 import bell from "../assets/Bell.svg"
 const NavBar = () => {
 const { user, logoutUser } = useContext(AuthContext);
+  
   return (
     <Navbar  className="mb-4" style={{ height: "70px",background: "#ffffff" }}>
       <Container fluid>

@@ -1,18 +1,33 @@
-import { useContext } from "react";
+import { useContext ,useState} from "react";
 import { Container, Stack } from "react-bootstrap";
 import AllUsers from "../components/Chat/AllUsers";
 import ChatBox from "../components/Chat/ChatBox";
 import UserCard from "../components/Chat/UserCard";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
-
+import FriendRequest from '../components/Request/FriendRequest';
 const Chat = () => {
   const { user } = useContext(AuthContext);
-  const { userChats, isUserChatsLoading, updateCurrentChat } =
+  const { userChats, isUserChatsLoading, updateCurrentChat} =
     useContext(ChatContext);
+    const { suggestRequest, SuggestRequest,getfriendRequests,friendRequests} =
+    useContext(AuthContext);
+    const [isOpen, setIsOpen] = useState(false);
+  const togglePopup = () => {
+    suggestRequest();
+    getfriendRequests();
+    setIsOpen(!isOpen);
+  };
+  
+
   return (
     <div className="container-chat">
       <AllUsers />
+      <button onClick={togglePopup}>Open Popup</button>
+      {isOpen && <> 
+      <div className="overlay" ></div>
+      {SuggestRequest && ( <FriendRequest onClose={togglePopup} data={SuggestRequest} datafriendRequests={friendRequests}/>)}
+     </>}
       {userChats?.length < 1 ? null : (
         <Stack direction="horizontal" gap={4} className="align-items-start">
           <Stack className="messages-box flex-grow-0 pe-3" gap={3}>
