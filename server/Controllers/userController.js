@@ -107,7 +107,15 @@ const loginUser = async (req, res) => {
     res.status(500).json(error);
   }
 };
-
+const finUserByID = async (req, res) => {
+  const { receiverId } = req.body;
+  try {
+    const user = await userModel.findById(receiverId);
+    res.status(200).json(user);
+  } catch (error) {
+    
+  }
+};
 const findUser = async (req, res) => {
   const { data } = req.body;
   let query = {};
@@ -240,17 +248,17 @@ const acceptFriendRequest = async (req, res) => {
     await sender.save();
 
     // Tạo cuộc trò chuyện giữa người gửi và người nhận
-    // const chat = await chatModel.findOne({
-    //   members: { $all: [request.senderId, request.receiverId] },
-    // });
+    const chat = await chatModel.findOne({
+      members: { $all: [request.senderId, request.receiverId] },
+    });
 
-    // if (!chat) {
-    //   const newChat = new chatModel({
-    //     members: [request.senderId, request.receiverId],
-    //   });
+    if (!chat) {
+      const newChat = new chatModel({
+        members: [request.senderId, request.receiverId],
+      });
 
-    //   await newChat.save();
-    // }
+      await newChat.save();
+    }
 
     res.status(200).json({ message: 'Đã chấp nhận yêu cầu kết bạn',sender});
   } catch (error) {
@@ -300,4 +308,4 @@ const getSenderInfoByReceiverIdHandler = async (req, res) => {
   }
 };
 
-module.exports = { getSenderInfoByReceiverIdHandler,getFriendRequestsById,registerUser, loginUser, findUser, getUsers, sendFriendRequest,acceptFriendRequest ,getUserInfo,authenticateToken};
+module.exports = { finUserByID,getSenderInfoByReceiverIdHandler,getFriendRequestsById,registerUser, loginUser, findUser, getUsers, sendFriendRequest,acceptFriendRequest ,getUserInfo,authenticateToken};

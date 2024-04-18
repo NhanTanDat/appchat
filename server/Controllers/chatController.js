@@ -21,16 +21,17 @@ const createChat = async (req, res) => {
 };
 
 const userChats = async (req, res) => {
-  const userId = req.params.userId;
+  const { memberId } = req.params;
 
   try {
     const chats = await chatModel.find({
-      members: { $in: [userId] },
+      members: memberId
     });
 
     res.status(200).json(chats);
   } catch (error) {
-    res.status(500).json(error);
+    console.error('Error fetching chats by member ID:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 

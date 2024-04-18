@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { baseUrl, getRequest } from "../utils/service";
+import { baseUrl, postRequest } from "../utils/service";
 
 export const useFetchRecipientUser = (chat, user) => {
   const [recipientUser, setRecipientUser] = useState(null);
@@ -10,8 +10,10 @@ export const useFetchRecipientUser = (chat, user) => {
   useEffect(() => {
     const getRecipientUser = async () => {
       if (!recipientId) return null;
-
-      const response = await getRequest(`${baseUrl}/users/find/${recipientId}`);
+      const data = {
+        receiverId: recipientId,
+      }
+      const response = await postRequest(`${baseUrl}/users/finduserbyid`, JSON.stringify(data));
 
       if (response.error) {
         return setError(error);

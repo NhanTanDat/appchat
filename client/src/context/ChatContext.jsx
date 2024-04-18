@@ -97,33 +97,33 @@ export const ChatContextProvider = ({ children, user }) => {
   }, [currentChat]);
 
   useEffect(() => {
-    const getUsers = async () => {
-      const response = await getRequest(`${baseUrl}/users`);
+    // const getUsers = async () => {
+    //   const response = await getRequest(`${baseUrl}/users`);
 
-      if (response.error) {
-        return console.log("Error fetching users:", response);
-      }
+    //   if (response.error) {
+    //     return console.log("Error fetching users:", response);
+    //   }
 
-      if (userChats) {
-        const pChats = response?.filter((u) => {
-          let isChatCreated = false;
+    //   if (userChats) {
+    //     const pChats = response?.filter((u) => {
+    //       let isChatCreated = false;
 
-          if (user._id === u._id) return false;
+    //       if (user._id === u._id) return false;
 
-          isChatCreated = userChats?.some(
-            (chat) => chat.members[0] === u._id || chat.members[1] === u._id
-          );
+    //       isChatCreated = userChats?.some(
+    //         (chat) => chat.members[0] === u._id || chat.members[1] === u._id
+    //       );
 
-          return !isChatCreated;
-        });
+    //       return !isChatCreated;
+    //     });
 
-        setPotentialChats(pChats);
-      }
+    //     setPotentialChats(pChats);
+    //   }
 
-      setAllUsers(response);
-    };
+    //   setAllUsers(response);
+    // };
 
-    getUsers();
+    // getUsers();
   }, [userChats]);
 
   useEffect(() => {

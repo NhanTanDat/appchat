@@ -59,6 +59,8 @@ export const AuthContextProvider = ({ children }) => {
       if (response.error) {
         return setRegisterError(response);
       }
+      localStorage.setItem("token", JSON.stringify(response.token));
+
       getUserInfo();
     },
     [registerInfo]
@@ -210,6 +212,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const logoutUser = useCallback(() => {
     localStorage.removeItem("User");
+    localStorage.setItem("token", JSON.stringify(""));
     setUser(null);
   }, []);
 

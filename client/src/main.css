@@ -219,13 +219,16 @@ e
   align-items: center;
   justify-content: center;
 }
-
+.container-chats{
+ 
+}
 .container{
   width: 100%;
   height: 100%;
 }
 .container-chat{
   padding: 0px 32px;
+  display: flex;
 }
 .overlay{
   position: fixed;

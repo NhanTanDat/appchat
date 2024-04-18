@@ -1,6 +1,5 @@
 import { useContext ,useState} from "react";
 import { Container, Stack } from "react-bootstrap";
-import AllUsers from "../components/Chat/AllUsers";
 import ChatBox from "../components/Chat/ChatBox";
 import UserCard from "../components/Chat/UserCard";
 import { AuthContext } from "../context/AuthContext";
@@ -21,14 +20,16 @@ const Chat = () => {
   
 
   return (
-    <div className="container-chat">
-      <AllUsers />
-      <button onClick={togglePopup}>Open Popup</button>
-      {isOpen && <> 
+    <div>
+       {isOpen && <> 
       <div className="overlay" ></div>
       {SuggestRequest && ( <FriendRequest onClose={togglePopup} data={SuggestRequest} datafriendRequests={friendRequests}/>)}
      </>}
+    <div className="container-chat">
+       <div className="container-chats">
+      <button onClick={togglePopup}>Open Popup</button>
       {userChats?.length < 1 ? null : (
+       
         <Stack direction="horizontal" gap={4} className="align-items-start">
           <Stack className="messages-box flex-grow-0 pe-3" gap={3}>
             {isUserChatsLoading && <p>Fetching Chats..</p>}
@@ -42,10 +43,11 @@ const Chat = () => {
               );
             })}
           </Stack>
-          
-          <ChatBox />
-        </Stack>
+        </Stack>   
       )}
+      </div>
+      <ChatBox />
+    </div>
     </div>
   );
 };

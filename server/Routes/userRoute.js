@@ -9,7 +9,8 @@ const {
   getUserInfo,
   authenticateToken,
   getFriendRequestsById,
-  getSenderInfoByReceiverIdHandler
+  getSenderInfoByReceiverIdHandler,
+  finUserByID
   
 } = require("../Controllers/userController");
 
@@ -24,5 +25,6 @@ router.post("/acceptfriendrequest", acceptFriendRequest);
 router.post("/getfriendrequests",getFriendRequestsById)
 router.post("/", getUsers);
 router.post("/getsenderinfo", getSenderInfoByReceiverIdHandler);
+router.post("/finduserbyid", finUserByID);
 
 module.exports = router;

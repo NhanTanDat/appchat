@@ -15,7 +15,7 @@ const ChatBox = () => {
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
   const [textMessage, setTextMessage] = useState("");
   const scroll = useRef();
-
+  const [sendingMessage, setSendingMessage] = useState(false);
   useEffect(() => {
     scroll.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -31,6 +31,17 @@ const ChatBox = () => {
     return (
       <p style={{ textAlign: "center", width: "100%" }}>Loading chat...</p>
     );
+
+    const handleSendMessage = () => {
+      if (textMessage.trim() !== '' && !sendingMessage) {
+          setSendingMessage(true); // Set sendingMessage to true to prevent multiple sends
+          sendTextMessage(textMessage, user, currentChat._id, () => {
+              setTextMessage(''); // Reset text message input after sending
+              setSendingMessage(false); // Set sendingMessage back to false after sending
+          });
+      }
+  };
+  
 
   return (
     <Stack  className="chat-box">
@@ -62,12 +73,18 @@ const ChatBox = () => {
           onChange={setTextMessage}
           fontFamily="nunito"
           borderColor="rgba(72, 112, 223, 0.2)"
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              handleSendMessage()
+            }
+        }}
         />
         <button
           className="send-btn"
-          onClick={() =>
-            sendTextMessage(textMessage, user, currentChat._id, setTextMessage)
+          onClick={() => 
+            handleSendMessage()
           }
+          
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
