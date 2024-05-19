@@ -10,12 +10,15 @@ const {
   authenticateToken,
   getFriendRequestsById,
   getSenderInfoByReceiverIdHandler,
-  finUserByID
-  
+  finUserByID,
+  upload,
+  uploadImg,
+  getAllFriendsByID,
+  creatgroupchat
 } = require("../Controllers/userController");
 
 const router = express.Router();
-
+router.post('/upload', upload.single('image'), uploadImg);
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/find/user", findUser);
@@ -26,5 +29,6 @@ router.post("/getfriendrequests",getFriendRequestsById)
 router.post("/", getUsers);
 router.post("/getsenderinfo", getSenderInfoByReceiverIdHandler);
 router.post("/finduserbyid", finUserByID);
-
+router.post("/getallfriendsbyid", getAllFriendsByID);
+router.post("/creatgroupchat", creatgroupchat);
 module.exports = router;

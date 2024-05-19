@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { createContext } from "react";
-import { baseUrl, getRequest, postRequest } from "../utils/service";
+import { baseUrl, getRequest, postRequest,postMAMAYRequest } from "../utils/service";
 import { io } from "socket.io-client";
 
 export const ChatContext = createContext();
@@ -152,26 +152,32 @@ export const ChatContextProvider = ({ children, user }) => {
     setCurrentChat(chat);
   }, []);
 
-  const sendTextMessage = useCallback(
-    async (textMessage, sender, currentChatId, setTextMessage) => {
-      if (!textMessage) return console.log("Bạn phải gõ một cái gì đó...");
-      const response = await postRequest(
-        `${baseUrl}/messages`,
-        JSON.stringify({
-          chatId: currentChatId,
-          senderId: sender._id,
-          text: textMessage,
-        })
-      );
-      if (response.error) {
-        return setSendTextMessageError(response);
-      }
-      setNewMessage(response);
-      setMessages((prev) => [...prev, response]);
-      setTextMessage("");
-    },
-    []
-  );
+  const sendTextMessage = useCallback(async (textMessage, sender, currentChatId ,files, setTextMessage) => {
+    try {
+      const formData = new FormData();
+      formData.append("text", textMessage);
+      formData.append("senderId", sender?._id);
+      formData.append("chatId", currentChatId);
+      if (files && Array.isArray(files)) { 
+        files.forEach((file, index) => {
+              formData.append("attachments", file);
+              console.log(file);
+          });
+        }
+        const response = await postMAMAYRequest(`${baseUrl}/messages`, formData);
+
+        if (response.error) {
+            throw new Error(response.message);
+        }
+        setNewMessage(response.data);
+        console.log(response.data)
+        setMessages(prev => [...prev, response.data]);
+        setTextMessage("");
+    } catch (error) {
+        setSendTextMessageError({ error: true, message: error.message });
+    }
+}, []);
+  
 
   const createChat = useCallback(async (senderId, receiverId) => {
     const response = await postRequest(

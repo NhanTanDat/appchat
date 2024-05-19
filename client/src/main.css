@@ -91,7 +91,7 @@ body {
 .messages {
   max-height: calc(100vh - 15rem);
   overflow-y: auto;
-  padding: 0 2rem;
+  padding:  2rem;
 }
 
 .message {
@@ -99,7 +99,6 @@ body {
   background: #F0F0F0;
   padding: 0.75rem;
   border-radius: 5px;
-  max-width: 50%;
 }
 
 .message.self {
@@ -119,6 +118,7 @@ body {
   width: 100%;
   background: #ffffff;
   padding: 1rem;
+ 
 }
 .send-btn {
   border: none;
@@ -219,9 +219,7 @@ e
   align-items: center;
   justify-content: center;
 }
-.container-chats{
- 
-}
+
 .container{
   width: 100%;
   height: 100%;
@@ -238,4 +236,79 @@ e
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5); /* Độ mờ có thể điều chỉnh bằng giá trị alpha (0 đến 1) */
   z-index: 4; /* Đảm bảo nó nằm trên popup */
+}
+.message-id{
+  position:relative;
+  z-index: 4;
+  max-width: 24px;
+  height: 24px;
+  right: 50px;
+}
+.message-senderId{
+  position:relative;
+  z-index: 4;
+  max-width: 24px;
+  height: 24px;
+  left: 50px;
+}
+.message-contai{
+  display: flex;
+}
+.menu-item{
+  color: #050505;
+}
+.menu-okela{
+  padding: 16px;
+  width: 100px;
+  height: 100px;
+  background-color: #ffffff;
+  border: 1px solid rgb(207, 207, 207,0.3);
+  border-radius: 8px;
+  gap: 8px;
+}
+.img-video{
+  border-top: 1px solid rgb(207, 207, 207,0.3);
+}
+.img{
+  border-radius: 8px;
+}
+.video{
+  border-radius: 16px;
+  padding: 8px;
+}
+.image-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));/* Xếp các hình ảnh theo tỉ lệ, với kích thước tối thiểu 150px */
+  gap: 10px; /* Khoảng cách giữa các hình ảnh */
+}
+.video-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));/* Xếp các hình ảnh theo tỉ lệ, với kích thước tối thiểu 150px */
+  gap: 10px; /* Khoảng cách giữa các hình ảnh */
+}
+
+.image-wrapper {
+  position: relative;
+  overflow: hidden;
+  padding-top: 100%; /* Tạo một phần trăm dựa trên chiều rộng để duy trì tỉ lệ */
+}
+
+.message-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Đảm bảo hình ảnh bao phủ hoàn toàn khu vực */
+}
+.video-container{
+  padding-top: 16px;
+  
+}
+.message-video{
+  border-radius: 8px;
+  width: 200px;
+}
+.image-wrapper{
+   border-radius: 8px;
 }

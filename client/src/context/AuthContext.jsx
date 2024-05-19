@@ -10,6 +10,7 @@ export const AuthContextProvider = ({ children }) => {
   const [isRegisterLoading, setIsRegisterLoading] = useState(false);
   const [SuggestRequest, setsuggestRequest]  = useState(null);
   const [friendRequests, setfriendRequests]  = useState(null);
+  const [friends, setfriends]  = useState(null);
   const [registerInfo, setRegisterInfo] = useState({
     name: "",
     phone:"",
@@ -81,6 +82,19 @@ export const AuthContextProvider = ({ children }) => {
 
     setIsRegisterLoading(false);
 
+};
+
+const getAllFriendsByID = async (senderId) => {
+
+  const data = {
+    id: senderId,
+  }
+  const response = await postRequest(
+    `${baseUrl}/users/getallfriendsbyid`,
+    JSON.stringify(data)
+  );
+  console.log(response);
+  setfriends(response)
 };
 
   const requestFriend = async (receiverId) => {
@@ -237,6 +251,8 @@ export const AuthContextProvider = ({ children }) => {
         getfriendRequests,
         friendRequests,
         acceptFriendRequest,
+        getAllFriendsByID,
+        friends
       }}
     >
       {children}

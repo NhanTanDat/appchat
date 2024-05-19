@@ -23,6 +23,7 @@ const UserCard = ({ chat, user }) => {
     (n) => n.senderId == recipientUser?._id
   );
 
+  
   const truncateText = (text) => {
     let shortText = text.substring(0, 20);
 
@@ -54,7 +55,7 @@ const UserCard = ({ chat, user }) => {
             <span className={isOnline ? "user-online" : ""}></span>
           </div>
           <div className="text-content">
-            <div className="name">{recipientUser?.name}</div>
+            <div className="name">{chat?.members.length > 2 ? "Chat Nhóm" : recipientUser?.name}</div>
             <div className="text">
               {latestMessage?.text && (
                 <span>{truncateText(latestMessage?.text)}</span>

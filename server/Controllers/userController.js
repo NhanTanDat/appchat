@@ -2,7 +2,62 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const validator = require("validator");
 const userModel = require("../Models/userModel");
-const chatModel = require("../Models/chatModel")
+const chatModel = require("../Models/chatModel");
+
+const express = require('express');
+const app = express();
+const multer = require("multer");
+const AWS = require("aws-sdk");
+require('dotenv').config();
+const path = require("path");
+const multerS3 = require('multer-s3');
+
+process.env.AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE = "1";
+
+AWS.config.update({
+  region: process.env.REGION,
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
+});
+
+const s3 = new AWS.S3();
+const bucketName = process.env.S3_BUCKET_NAME;
+
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: bucketName,
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    acl: 'public-read',
+    key: function (req, file, cb) {
+      const extname = path.extname(file.originalname).toLowerCase();
+      const isImage = ['.jpg', '.jpeg', '.png', '.gif'].includes(extname);
+      const isVideo = ['.mp4', '.mov', '.avi', '.mkv'].includes(extname);
+
+      if (isImage) {
+        cb(null, 'images/' + Date.now() + '-' + path.basename(file.originalname));
+      } else if (isVideo) {
+        cb(null, 'videos/' + Date.now() + '-' + path.basename(file.originalname));
+      } else {
+        cb(new Error('Invalid file type'));
+      }
+    }
+  })
+});
+
+const uploadImg = (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'Không co tập tin nao được tải lên.' });
+    }
+  
+    // Trả về đường dẫn của hình ảnh đã lưu trữ trên S3
+    res.status(200).json({ message: 'Ảnh đã được lưu', path: req.file.location });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Đã xảy ra lỗi khi tải ảnh lên S3.' });
+  }
+}
 
 const createToken = ( _id, name, phone, email) => {
   return jwt.sign({ _id , name, phone, email}, process.env.JWT_SECRET_KEY, { expiresIn: "1d" });
@@ -267,6 +322,27 @@ const acceptFriendRequest = async (req, res) => {
   }
 };
 
+const creatgroupchat = async (req, res) =>{
+  try {
+    const { memberIds } = req.body;
+
+    // Tìm kiếm chat nhóm với tất cả các thành viên được chỉ định
+    const chat = await chatModel.findOne({ members: { $all: memberIds } });
+
+    // Nếu không tìm thấy chat nhóm, tạo mới
+    if (!chat) {
+      const newChat = new chatModel({ members: memberIds });
+      await newChat.save();
+      return res.status(201).json({ message: 'Group chat created successfully', chatId: newChat });
+    } else {
+      return res.status(409).json({ message: 'Group chat already exists for the given members', chatId: chat });
+    }
+  } catch (error) {
+    console.error('Error:', error.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
 
 const getSenderInfoByReceiverId = async (senderId) => {
   try {
@@ -294,6 +370,27 @@ const getSenderInfoByReceiverId = async (senderId) => {
   }
 };
 
+const getAllFriendsByID = async (req, res) => {
+  const { id } = req.body;
+  try {
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const friendIds = user.friends.map(friend => friend._id); // Lấy ra chỉ ID của bạn bè
+    const data = friendIds.map(friendId => userModel.findById(friendId)); // Tạo một mảng các promise
+
+    const friends = await Promise.all(data);
+
+    // Trả về danh sách bạn bè
+    res.status(200).json({ friends });
+  } catch (error) {
+    console.error('Error:', error.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
 const getSenderInfoByReceiverIdHandler = async (req, res) => {
   const {senderId} = req.body; // Assuming receiverId is obtained from the request parameters
 
@@ -308,4 +405,4 @@ const getSenderInfoByReceiverIdHandler = async (req, res) => {
   }
 };
 
-module.exports = { finUserByID,getSenderInfoByReceiverIdHandler,getFriendRequestsById,registerUser, loginUser, findUser, getUsers, sendFriendRequest,acceptFriendRequest ,getUserInfo,authenticateToken};
+module.exports = { creatgroupchat,getAllFriendsByID,upload,uploadImg,finUserByID,getSenderInfoByReceiverIdHandler,getFriendRequestsById,registerUser, loginUser, findUser, getUsers, sendFriendRequest,acceptFriendRequest ,getUserInfo,authenticateToken};
