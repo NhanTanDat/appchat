@@ -21,19 +21,21 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", (message) => {
-    const user = onlineUsers.find(
-      (user) => user.userId === message.recipientId
-    );
+    console.log("message", message);
 
-    if (user) {
-      console.log("gửi tin nhắn và thông báo");
-      io.to(user.socketId).emit("getMessage", message);
-      io.to(user.socketId).emit("getNotification", {
-        senderId: message.senderId,
-        isRead: false,
-        date: new Date(),
-      });
-    }
+    // Gửi tin nhắn và thông báo cho từng người nhận
+    message.recipientIds.forEach(recipientId => {
+      const user = onlineUsers.find(user => user.userId === recipientId);
+      if (user) {
+        console.log("Gửi tin nhắn và thông báo cho user", recipientId);
+        io.to(user.socketId).emit("getMessage", message);
+        io.to(user.socketId).emit("getNotification", {
+          senderId: message.senderId,
+          isRead: false,
+          date: new Date(),
+        });
+      }
+    });
   });
 
   socket.on("disconnect", () => {

@@ -21,6 +21,10 @@ export const ChatContextProvider = ({ children, user }) => {
   const [notifications, setNotifications] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
 
+
+
+
+
   console.log("userChats", userChats);
   console.log("currentChat", currentChat);
   console.log("messages", messages);
@@ -51,8 +55,13 @@ export const ChatContextProvider = ({ children, user }) => {
 
   useEffect(() => {
     if (socket === null) return;
-    const recipientId = currentChat?.members.find((id) => id !== user?._id);
-    socket.emit("sendMessage", { ...newMessage, recipientId });
+    const recipientIds = currentChat.members
+      .filter((member) => member._id !== user?._id)
+      .map((member) => member._id);
+    console.log("currentChatcurrentChatcurrentChatcurrentChat",currentChat)
+    console.log("recipientIdrecipientId",recipientIds)
+    console.log("useruseruseruseruser",user)
+    socket.emit("sendMessage", { ...newMessage, recipientIds });
   }, [newMessage]);
 
 
@@ -95,6 +104,29 @@ export const ChatContextProvider = ({ children, user }) => {
     };
     getMessages();
   }, [currentChat]);
+
+  const createGroupChat = async (memberIds,name,file)=> {
+    try {
+      const formData = new FormData();
+      formData.append("memberIds", JSON.stringify(memberIds));
+      formData.append("name", name);
+      formData.append("image", file);
+      const response = await postMAMAYRequest(
+        `${baseUrl}/users/creatgroupchat`,
+        formData
+      );
+    
+      if (!response.ok) {
+        throw new Error(`Failed to create group chat: ${response.statusText}`);
+      }
+    
+      return response;
+    } catch (error) {
+      
+    }
+   
+  };
+
 
   useEffect(() => {
     // const getUsers = async () => {
@@ -149,7 +181,7 @@ export const ChatContextProvider = ({ children, user }) => {
   }, [user, notifications]);
 
   const updateCurrentChat = useCallback(async (chat) => {
-    setCurrentChat(chat);
+     setCurrentChat(chat);
   }, []);
 
   const sendTextMessage = useCallback(async (textMessage, sender, currentChatId ,files, setTextMessage) => {
@@ -170,7 +202,7 @@ export const ChatContextProvider = ({ children, user }) => {
             throw new Error(response.message);
         }
         setNewMessage(response.data);
-        console.log(response.data)
+  
         setMessages(prev => [...prev, response.data]);
         setTextMessage("");
     } catch (error) {
@@ -214,7 +246,7 @@ export const ChatContextProvider = ({ children, user }) => {
           return element;
         }
       });
-      updateCurrentChat(readChat);
+     updateCurrentChat(readChat);
       setNotifications(modifiedNotifications);
     },
     []
@@ -263,6 +295,7 @@ export const ChatContextProvider = ({ children, user }) => {
         markNotificationAsRead,
         markThisUserNotificationsAsRead,
         newMessage,
+        createGroupChat
       }}
     >
       {children}

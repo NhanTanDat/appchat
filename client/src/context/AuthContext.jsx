@@ -6,6 +6,7 @@ export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [userInfor, setUserInfor] = useState(null);
   const [registerError, setRegisterError] = useState(null);
   const [isRegisterLoading, setIsRegisterLoading] = useState(false);
   const [SuggestRequest, setsuggestRequest]  = useState(null);
@@ -83,7 +84,16 @@ export const AuthContextProvider = ({ children }) => {
     setIsRegisterLoading(false);
 
 };
-
+const getUserInformation = async(id) => {
+  const data = {
+    id: id,
+  }
+  const response = await postRequest(
+    `${baseUrl}/users/getInfoUser`,
+    JSON.stringify(data)
+  );
+  setUserInfor(response);
+}
 const getAllFriendsByID = async (senderId) => {
 
   const data = {
@@ -252,7 +262,9 @@ const getAllFriendsByID = async (senderId) => {
         friendRequests,
         acceptFriendRequest,
         getAllFriendsByID,
-        friends
+        friends,
+        userInfor,
+        getUserInformation
       }}
     >
       {children}

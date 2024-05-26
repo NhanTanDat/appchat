@@ -6,16 +6,33 @@ import Register from "./pages/Register";
 import Container from "react-bootstrap/Container";
 import NavBar from "./components/NavBar";
 import { ChatContextProvider } from "./context/ChatContext";
-import { useContext } from "react";
+import { useContext ,useState} from "react";
 import { AuthContext } from "./context/AuthContext";
 import Home from "./pages/Home/Home";
-
+import AccountInformation from "../src/components/Profile/AccountInformation";
 function App() {
-  const { user } = useContext(AuthContext);
+  const { user,getUserInformation,userInfor } = useContext(AuthContext);
+  const [isAccountInformation, setIsAccountInformation] = useState(false);
+
+  const togglePopupAccountInformation = () => {
+    setIsAccountInformation(!isAccountInformation);
+  };
+
+
+  
+
+
+
   return (
     <ChatContextProvider user={user}>
-      {/* <Container className="container" fluid> */}
-      <NavBar />
+    
+      <NavBar togglePopupAccountInformation={togglePopupAccountInformation}/>
+      {isAccountInformation && (
+        <>     <div className="overlay" onClick={togglePopupAccountInformation}>
+        </div>
+          <AccountInformation onClose={togglePopupAccountInformation} /></>
+   
+      )}
         <Routes>
           <Route path="/" element={user ? <Chat /> : <Login />} />
           <Route path="/register" element={user ? <Chat /> : <Register />} />
@@ -23,7 +40,7 @@ function App() {
           <Route path="/home" element={ <Home />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
-      {/* </Container> */}
+
     </ChatContextProvider>
   );
 }

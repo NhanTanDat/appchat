@@ -31,7 +31,7 @@ const upload = multer({
     acl: 'public-read',
     key: function (req, file, cb) {
       const extname = path.extname(file.originalname).toLowerCase();
-      const isImage = ['.jpg', '.jpeg', '.png', '.gif'].includes(extname);
+      const isImage = ['.jpg', '.jpeg', '.png', '.gif', '.svg'].includes(extname);
       const isVideo = ['.mp4', '.mov', '.avi', '.mkv'].includes(extname);
 
       if (isImage) {
@@ -106,12 +106,11 @@ const registerUser = async (req, res) => {
   const { name, email, phone, password } = req.body;
   const friends = [];
   const friendRequest = [];
-  const avatar = "default-avatar.jpg";
   try {
     let user = await userModel.findOne({ email });
     if (user) return res.status(400).json("Người dùng đã tồn tại...");
 
-    user = new userModel({ name,avatar, email, phone, password,friends,friendRequest });
+    user = new userModel({ name, email, phone, password,friends,friendRequest });
 
     if (!name || !email || !password)
       return res.status(400).json("Tất cả các trường là bắt buộc...");
@@ -197,26 +196,26 @@ const getUsers = async (req, res) => {
   const {id} = req.body; // ID của người dùng hiện tại
 
   try {
-    // Lấy danh sách bạn bè của người dùng
-    const user = await userModel.findById(id);
+      // Lấy danh sách bạn bè của người dùng
+      const user = await userModel.findById(id);
 
-    const friendIds = user.friends.map(friend => friend.id);
+      const friendIds = user.friends.map(friend => friend.id);
 
-    // Lấy danh sách người đã gửi yêu cầu kết bạn cho người dùng
-    const requestSenderIds = user.friendRequest.map(request => request.receiverId);
+      // Lấy danh sách người đã gửi yêu cầu kết bạn cho người dùng
+      const requestSenderIds = user.friendRequest.map(request => request.receiverId);
 
-    const requestIds = user.friendRequest.map(request => request.senderId);
+      const requestIds = user.friendRequest.map(request => request.senderId);
 
-    // Tạo mảng ID bao gồm bản thân người dùng và danh sách bạn bè và người đã gửi yêu cầu kết bạn
-    const excludeIds = [...friendIds, ...requestSenderIds,...requestIds, id];
+      // Tạo mảng ID bao gồm bản thân người dùng và danh sách bạn bè và người đã gửi yêu cầu kết bạn
+      const excludeIds = [...friendIds, ...requestSenderIds,...requestIds, id];
 
-    // Lấy danh sách người dùng không phải là bạn bè, không phải người đã gửi yêu cầu kết bạn, và không phải bản thân người gửi yêu cầu kết bạn
-    const nonFriendsAndNonRequestSenders = await userModel.find({ _id: { $nin: excludeIds } });
+      // Lấy danh sách người dùng không phải là bạn bè, không phải người đã gửi yêu cầu kết bạn, và không phải bản thân người gửi yêu cầu kết bạn
+      const nonFriendsAndNonRequestSenders = await userModel.find({ _id: { $nin: excludeIds } });
 
-    res.status(200).json(nonFriendsAndNonRequestSenders);
-} catch (error) {
-    res.status(500).json({ message: 'Đã xảy ra lỗi khi lấy danh sách người dùng.', error });
-}
+      res.status(200).json(nonFriendsAndNonRequestSenders);
+    } catch (error) {
+        res.status(500).json({ message: 'Đã xảy ra lỗi khi lấy danh sách người dùng.', error });
+    }
 };
 const getFriendRequestsById = async (req, res) => {
   const { data } = req.body; 
@@ -324,18 +323,23 @@ const acceptFriendRequest = async (req, res) => {
 
 const creatgroupchat = async (req, res) =>{
   try {
-    const { memberIds } = req.body;
-
+    const { memberIds, name } = req.body;
+    let parsedMemberIds;
+    parsedMemberIds = JSON.parse(memberIds);
     // Tìm kiếm chat nhóm với tất cả các thành viên được chỉ định
-    const chat = await chatModel.findOne({ members: { $all: memberIds } });
-
+    const chat = await chatModel.findOne({ members: { $all: parsedMemberIds._id } });
+    let avatar = ''
+    const host = parsedMemberIds[0]
+    if (req.file && req.file.location) {
+      avatar = req.file.location;
+    }
     // Nếu không tìm thấy chat nhóm, tạo mới
     if (!chat) {
-      const newChat = new chatModel({ members: memberIds });
+      const newChat = new chatModel({ members: parsedMemberIds, name,avatar, host });
       await newChat.save();
-      return res.status(201).json({ message: 'Group chat created successfully', chatId: newChat });
+      return res.status(200).json({ message: 'Nhóm đã được tạo thành công', data: newChat, status: 200});
     } else {
-      return res.status(409).json({ message: 'Group chat already exists for the given members', chatId: chat });
+      return res.status(200).json({ message: 'Trò chuyện nhóm đã tồn tại cho các thành viên nhất định', data: chat , status: 400});
     }
   } catch (error) {
     console.error('Error:', error.message);
@@ -405,4 +409,34 @@ const getSenderInfoByReceiverIdHandler = async (req, res) => {
   }
 };
 
-module.exports = { creatgroupchat,getAllFriendsByID,upload,uploadImg,finUserByID,getSenderInfoByReceiverIdHandler,getFriendRequestsById,registerUser, loginUser, findUser, getUsers, sendFriendRequest,acceptFriendRequest ,getUserInfo,authenticateToken};
+// lấy thông tin user
+const getImformationUser = async (req, res) => {
+  const {id} = req.body;
+  try {
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res.status(200).json({ message: 'Người dùng này không tồn tại',status: 400  });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+
+}
+
+module.exports = { 
+  getImformationUser,
+  creatgroupchat,
+  getAllFriendsByID,
+  upload,
+  uploadImg,
+  finUserByID,
+  getSenderInfoByReceiverIdHandler,
+  getFriendRequestsById,
+  registerUser, 
+  loginUser,
+   findUser,
+    getUsers, 
+    sendFriendRequest,
+    acceptFriendRequest ,
+    getUserInfo,authenticateToken};

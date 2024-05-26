@@ -37,13 +37,14 @@ const FriendRequest = ({ onClose, data ,datafriendRequests }) => {
                                 <div key={index} style={{ width: "100%", display: "flex", marginTop: "16px" }}>
                                     <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
                                         <div style={{ display: "flex", alignItems: "center" }}>
-                                            <img style={{ width: "24px", height: "24px" }} />
+                                        <img style={{ width: "40px", height: "40px", borderRadius:"50%" }} src={item.avatar}/>
                                             <div style={{ paddingLeft: "16px" }}>
                                                 <div>{item.name}</div>
                                                 <div>{item.email}</div>
                                             </div>
                                         </div>
-                                        <div onClick={() => acceptFriendRequest(item.id)}>Chấp nhận</div>
+                                        <div onClick={() => {acceptFriendRequest(item.id)
+                                            window.location.reload()}}>Chấp nhận</div>
                                     </div>
                                 </div>
                             ))}
@@ -59,13 +60,14 @@ const FriendRequest = ({ onClose, data ,datafriendRequests }) => {
                                 <div key={index} style={{ width: "100%", display: "flex", marginTop: "16px" }}>
                                     <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
                                         <div style={{ display: "flex", alignItems: "center" }}>
-                                            <img style={{ width: "24px", height: "24px" }} />
+                                            <img style={{ width: "40px", height: "40px", borderRadius:"50%" }} src={item.avatar}/>
                                             <div style={{ paddingLeft: "16px" }}>
                                                 <div>{item.name}</div>
                                                 <div>{item.email}</div>
                                             </div>
                                         </div>
-                                        <div onClick={() => requestFriend(item._id)}>Kết bạn</div>
+                                        <div onClick={() => {requestFriend(item._id)
+                                         window.location.reload()}}>Kết bạn</div>
                                     </div>
                                 </div>
                             ))}

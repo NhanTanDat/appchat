@@ -36,10 +36,20 @@ body {
 .user-card .text-content {
   width: 170px;
   padding-left: 16px;
+
 }
 
 .user-card .name {
   font-weight: 700;
+  display: flex;
+}
+
+.user-card .name2 {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
 .user-card .text,
@@ -49,7 +59,7 @@ body {
 
 }
 .avatar{
-  width: 50;
+  max-width: 50px;
   height: 50px;
   position: relative;
   display: inline-block;
@@ -81,7 +91,7 @@ body {
 .chat-header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  
   padding: 0.75rem;
   color: #050505;
   background: #ffffff;
@@ -96,7 +106,7 @@ body {
 
 .message {
   color: #050505;
-  background: #F0F0F0;
+  /* background: #F0F0F0; */
   padding: 0.75rem;
   border-radius: 5px;
 }
@@ -311,4 +321,35 @@ e
 }
 .image-wrapper{
    border-radius: 8px;
+}
+.chat-scroll {
+  max-height: 100hv; /* Adjust the height as needed */
+  overflow-y: scroll;
+}
+.avatar-group {
+  position: relative;
+  display: flex;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  border: 2px solid white; /* Optional: to add a white border around images */
+
+}
+
+.count {
+  background-color: #e0e0e0; /* Background color for the count circle */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #333; /* Text color */
+  font-size: 16px; /* Adjust font size as needed */
+  font-weight: bold; /* Make the text bold */
+}
+.avatar-row{
+  display: flex;
 }

@@ -6,14 +6,15 @@ import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
 import ChatGroup from '../components/ChatGroup/ChatGroup';
 import FriendRequest from '../components/Request/FriendRequest';
+
 const Chat = () => {
   const { user } = useContext(AuthContext);
-  const { userChats, isUserChatsLoading, updateCurrentChat} =
+  const { userChats, isUserChatsLoading, updateCurrentChat,createGroupChat} =
     useContext(ChatContext);
     const { suggestRequest, SuggestRequest,getfriendRequests,friendRequests,getAllFriendsByID,friends} =
     useContext(AuthContext);
-    
     const [isOpen, setIsOpen] = useState(false);
+   
     const [isOpenChatGroup, setIsOpenChatGroup] = useState(false);
   const togglePopup = () => {
     suggestRequest();
@@ -24,13 +25,15 @@ const Chat = () => {
     getAllFriendsByID(user._id);
     setIsOpenChatGroup(!isOpenChatGroup);
   };
-
+  
+  console.log("userChats",userChats)
   return (
    
     <div>
-       {isOpenChatGroup && <> 
+      
+     {isOpenChatGroup && <> 
       <div className="overlay" ></div>
-      {friends && ( <ChatGroup onClose={togglePopupChatGroup} friends={friends} />)}
+      {friends && ( <ChatGroup onClose={togglePopupChatGroup} friends={friends} user={user} createGroupChat={createGroupChat}/>)}
      </>}
        {isOpen && <> 
       <div className="overlay" ></div>
@@ -44,7 +47,7 @@ const Chat = () => {
       </div>
       {userChats?.length < 1 ? null : (
         <Stack direction="horizontal" gap={4} className="align-items-start">
-          <Stack className="messages-box flex-grow-0 pe-3" gap={3}>
+          <Stack className="messages-box flex-grow-0 pe-3 chat-scroll " gap={3}>
             {isUserChatsLoading && <p>Fetching Chats..</p>}
             {(!isUserChatsLoading && !userChats) ||
               (!userChats?.length === 0 && <p>No Chats..</p>)}
@@ -59,7 +62,7 @@ const Chat = () => {
         </Stack>   
       )}
       </div>
-      <ChatBox />
+      <ChatBox/>
     </div>
     </div>
   );

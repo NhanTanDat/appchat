@@ -14,7 +14,8 @@ const {
   upload,
   uploadImg,
   getAllFriendsByID,
-  creatgroupchat
+  creatgroupchat,
+  getImformationUser
 } = require("../Controllers/userController");
 
 const router = express.Router();
@@ -30,5 +31,9 @@ router.post("/", getUsers);
 router.post("/getsenderinfo", getSenderInfoByReceiverIdHandler);
 router.post("/finduserbyid", finUserByID);
 router.post("/getallfriendsbyid", getAllFriendsByID);
-router.post("/creatgroupchat", creatgroupchat);
+router.post("/creatgroupchat",upload.single('image'), creatgroupchat);
+router.post("/getInfoUser", getImformationUser);
+
+
+
 module.exports = router;

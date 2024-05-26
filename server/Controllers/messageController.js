@@ -48,13 +48,12 @@ res.setHeader('Content-Type', 'multipart/form-data');
 res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173'); // Specify the origin if needed
 res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
 res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept, Authorization'); // Include additional headers if needed
-res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
 res.setHeader('Access-Control-Allow-Credentials', 'true'); // Allow credentials (cookies, authorization headers, etc.
   console.log(req.body.attachments);
   const { chatId, senderId, text } = req.body;
   const { attachments } = req.body;
   try {
-
+    console.log(req.body)
     if (attachments) {
       return res.status(400).json({ message: 'Không co tập tin nao được tải lên.' });
     }

@@ -14,7 +14,7 @@ const friendRequestSchema = new mongoose.Schema({
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, minlength: 3, maxlength: 30 },
-    avatar: { type: String, required: true },
+    avatar: { type: String, default: "https://tandat.s3.ap-southeast-1.amazonaws.com/images/1716625763969-avarter.svg" },
     email: {
       type: String,
       required: true,

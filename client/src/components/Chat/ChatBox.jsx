@@ -8,6 +8,7 @@ import moment from "moment";
 import InputEmoji from "react-input-emoji";
 import { useEffect } from "react";
 import icon from "../../assets/Dots_Menu_Icon_UIA.png"
+import avarter from "../../assets/avarter.svg"
 import icon2 from "../../assets/Frame 958477824.png"
 const ChatBox = () => {
   const fileInputRef = useRef(null);
@@ -51,13 +52,14 @@ const ChatBox = () => {
         }
       if (textMessage.trim() !== '' && !sendingMessage) {
         console.log(combinedFiles)
-        setSendingMessage(true); // Set sendingMessage to true to prevent multiple sends
+        setSendingMessage(true); // Set sendingMessage to true to prevent multiple send
+
         sendTextMessage(textMessage, user,currentChat._id, combinedFiles, () => {
           setTextMessage(''); // Reset text message input after sending
           setSendingMessage(false); // Set sendingMessage back to false after sending
           setImg([]); // Remove all elements from the img array
           setVideo([]); // Remove all elements from the video array
-        });
+        }); 
       }
     };
   const handleMouseEnter = (index) => {
@@ -128,10 +130,47 @@ const ChatBox = () => {
       }
     }
   };
+  const otherMember = currentChat.members.find(member => member._id !== user._id);
+  const abc =  (id) =>{
+    console.log("currentChatcurrentChatcurrentChatcurrentChat",currentChat)
+      return currentChat.members.find(member => member._id == id);
+  }
+
+
+
+
   return (
     <Stack  className="chat-box">
       <div className="chat-header">
-        <strong>{recipientUser?.name}</strong>
+      <div style={{display:"flex", alignItems:"center", fontWeight:"700", gap:"16px"}} className="">
+            {recipientUser && ( 
+              <div>
+                {currentChat?.members.length > 2 ? (
+                 <div class="avatar-group">
+                    <div style={{ height: "50px", width: "50px"}}>
+                      <div style={{display:"flex"}}>
+                      {currentChat?.members.slice(0, 2).map((member, index) => (
+                        <img src={member.avatar} className="avatar" height="24px" key={index} />
+                      ))}
+                        </div>
+                      <div style={{display:"flex"}}>
+                        {currentChat?.members.slice(2, 3).map((member, index) => (
+                          <img src={member.avatar} className="avatar" height="24px" key={index} />
+                        ))}
+                        {currentChat?.members.length > 3 && (
+                          
+                          <div style={{backgroundColor:"#E5E8EA", minWidth:"30px",maxHeight:"40px", borderRadius:"20px", display:"flex", justifyContent:"center", alignItems:"center"}}>+{currentChat.members.length - 3}</div>
+                        )}
+                      </div>
+                    </div>
+                </div>
+                ) : (<div>
+                  {otherMember && (<img src={otherMember.avatar}  height="50px" width="50px" style={{borderRadius:"50%"}} />)}
+                  </div>)}
+              </div>
+            )} 
+            {recipientUser &&(<div className="name" >{currentChat?.members.length > 2 ? currentChat?.name : otherMember?.name}</div>)}
+          </div>
       </div>
       <Stack gap={3} className="messages">
       {messages &&
@@ -197,6 +236,14 @@ const ChatBox = () => {
         ) : (
           <>
             <Stack>
+              <div style={{display:"flex"}}>
+                {currentChat.members.length > 2 ? ( <img height="50px" width="50px" style={{borderRadius:"50%", marginRight:"16px"}} src={ abc(message.senderId).avatar}/>):<img height="50px" width="50px" style={{borderRadius:"50%", marginRight:"16px"}} src={otherMember.avatar} />}
+               
+              <div>
+                
+              {currentChat.members.length > 2 ? ( <span style={{fontWeight:"700"}}>{abc(message.senderId).name}</span>):(<span style={{fontWeight:"700"}}>{otherMember.name}</span>)}
+              <div style={{backgroundColor:"#F0F0F0", padding:"16px", borderRadius:"8px"}}>
+               
               <span>{message.text}</span>
               <div style={{display:"flex" , gap:"10px" , marginTop:"16px"}}> 
               <div className="image-container">
@@ -223,6 +270,9 @@ const ChatBox = () => {
               <span className="message-footer">
                 {moment(message.createdAt).calendar()}
               </span>
+              </div>
+              </div>
+              </div>
             </Stack>
             <span className="message-senderId" onClick={toggleMenu} style={{ visibility: hoveredIndex === index ? 'visible' : 'hidden' } }>
                 <img src={icon} style={{ marginLeft: '20px' }} />
